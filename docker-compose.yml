@@ -1,0 +1,28 @@
+version: '3.9'
+
+secrets:
+  BOT_WEB_APP_SERVER_SECRET:
+    file: ./secrets/BOT_WEB_APP_SERVER_SECRET
+  DB_STRING:
+    file: ./secrets/DB_STRING
+
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: dockerfile
+      target: base
+    volumes:
+      - ./src:/home/node/app/src
+    container_name: kiera-api
+    ports:
+      - '127.0.0.1:8234:8234'
+    # expose:
+    #   - '8234'
+    command: npm run dev
+    restart: on-failure
+    secrets:
+      - BOT_WEB_APP_SERVER_SECRET
+      - DB_STRING
+    environment:
+      NODE_ENV: development

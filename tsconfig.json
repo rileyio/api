@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "inlineSourceMap": true,
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./app",
+    "resolveJsonModule": true,
+    "paths": {
+      "#/*": ["./src/*"],
+      "#db": ["./src/db/index.ts"],
+      "#objects/*": ["../src/objects/*.ts"],
+      "#secrets": ["./src/secrets.ts"],
+      "#utils": ["./src/utils/index.ts"]
+    },
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "target": "ES2022",
+    "typeRoots": ["src/typings", "./node_modules/@types/"]
+  },
+  "exclude": ["node_modules", "app"],
+  "include": ["src/**/*.ts"]
+}

@@ -1,0 +1,7 @@
+.git
+.logs
+.vscode
+.ideas
+.github
+node_modules
+secrets/

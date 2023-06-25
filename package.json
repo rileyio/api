@@ -1,0 +1,18 @@
+{
+  "name": "kiera-api",
+  "version": "1.0.0",
+  "description": "Kiera Bot's API",
+  "repository": "https://github.com/rileyio/kiera-api.git",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Emma <RileyIO>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.0"
+  }
+}
