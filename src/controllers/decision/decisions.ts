@@ -1,13 +1,13 @@
-import * as Middleware from '#api/middleware/index'
-import * as Validation from '#api/validations/index'
+import * as Middleware from '#/middleware/index'
+import * as Validation from '#/validations/index'
 
 import { Guild, User } from 'discord.js'
 import { TrackedDecision, TrackedDecisionOption } from '#objects/decision'
-import { WebRoute, WebRouted } from '#api/web-router'
+import { WebRoute, WebRouted } from '#/web-router'
 
 import { ObjectId } from 'bson'
 import { badRequestError } from '#/api/errors.ts'
-import { validate } from '#api/utils/validate'
+import { validate } from '#/utils/validate'
 
 export const Routes: Array<WebRoute> = [
   {

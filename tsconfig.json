@@ -12,10 +12,10 @@
     "resolveJsonModule": true,
     "paths": {
       "#/*": ["./src/*"],
-      "#db": ["./src/db/index.ts"],
-      "#objects/*": ["../src/objects/*.ts"],
-      "#secrets": ["./src/secrets.ts"],
-      "#utils": ["./src/utils/index.ts"]
+      "#db": ["./src/common/db/index.ts"],
+      "#objects/*": ["./src/common/objects/*.ts"],
+      "#secrets": ["./src/common/secrets.ts"],
+      "#utils": ["./src/common/utils/index.ts"]
     },
     "preserveConstEnums": true,
     "removeComments": true,
@@ -23,8 +23,8 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "target": "ES2022",
-    "typeRoots": ["src/typings", "./node_modules/@types/"]
+    "typeRoots": ["./node_modules/@types/"]
   },
   "exclude": ["node_modules", "app"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../src/utils/**/*.ts", "../src/objects/**/*.ts", "../src/db/**/*.ts"]
 }

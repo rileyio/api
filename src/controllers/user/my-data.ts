@@ -1,6 +1,6 @@
-import * as Middleware from '#api/middleware/index'
+import * as Middleware from '#/middleware/index'
 
-import { WebRoute, WebRouted } from '#api/web-router'
+import { WebRoute, WebRouted } from '#/web-router'
 
 export const Routes: Array<WebRoute> = [
   {

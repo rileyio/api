@@ -1,7 +1,7 @@
 import * as DiscordOauth2 from 'discord-oauth2'
 import * as crypto from 'crypto'
 
-import { WebRoute, WebRouted } from '#api/web-router'
+import { WebRoute, WebRouted } from '#/web-router'
 
 import { TrackedUser } from '#objects/user/index'
 import { read as getSecret } from '#secrets'

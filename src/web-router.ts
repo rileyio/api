@@ -1,6 +1,5 @@
+import * as Utils from '#utils'
 import * as express from 'express'
-
-import { Bot } from '#/index'
 
 export interface WebRoute {
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -12,7 +11,7 @@ export interface WebRoute {
 }
 
 export class WebRouted {
-  public Bot: Bot
+  public log: Utils.Logger.Debug
   public route: WebRoute
   public controller: (routed: WebRouted) => Promise<boolean>
   // Express args
@@ -27,12 +26,12 @@ export class WebRouted {
 }
 
 export class WebRouter {
-  public Bot: Bot
+  public log: Utils.Logger.Debug
   public server: express.Application
   public routes: Array<WebRoute> = []
 
-  constructor(bot: Bot, server: express.Application, routes: Array<WebRoute>) {
-    this.Bot = bot
+  constructor(logger: Utils.Logger.Debug, server: express.Application, routes: Array<WebRoute>) {
+    this.log = logger
     this.server = server
     this.routes = routes
 
@@ -42,7 +41,7 @@ export class WebRouter {
         this.server.get(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              Bot: this.Bot,
+              log: this.log,
               next: next,
               req: req,
               res: res,
@@ -55,7 +54,7 @@ export class WebRouter {
         this.server.post(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              Bot: this.Bot,
+              log: this.log,
               next: next,
               req: req,
               res: res,
@@ -68,7 +67,7 @@ export class WebRouter {
         this.server.delete(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              Bot: this.Bot,
+              log: this.log,
               next: next,
               req: req,
               res: res,
@@ -81,7 +80,7 @@ export class WebRouter {
         this.server.patch(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              Bot: this.Bot,
+              log: this.log,
               next: next,
               req: req,
               res: res,
@@ -94,7 +93,7 @@ export class WebRouter {
         this.server.put(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              Bot: this.Bot,
+              log: this.log,
               next: next,
               req: req,
               res: res,
@@ -122,7 +121,7 @@ export async function middlewareHandler(routed: WebRouted) {
     mwareProcessed += 1
   }
 
-  routed.Bot.Log.API.log(`Router -> [${routed.route.path}] WebRoute middleware processed: ${mwareProcessed}/${mwareCount}`)
+  routed.log.log(`Router -> [${routed.route.path}] WebRoute middleware processed: ${mwareProcessed}/${mwareCount}`)
 
   // Stop execution of route if middleware is halted
   if (mwareProcessed === mwareCount) {

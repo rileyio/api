@@ -1,6 +1,6 @@
 import * as Path from 'path'
 
-import { WebRoute } from '#api/web-router'
+import { WebRoute } from '#/web-router'
 import glob from 'fast-glob'
 
 export async function webRouteLoader() {
