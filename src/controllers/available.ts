@@ -23,7 +23,7 @@ export const Routes: Array<WebRoute> = [
 
 export async function settings(routed: WebRouted) {
   // this.DEBUG_WEBAPI('req params', v.o)
-  const templateNotifications = await routed.Bot.DB.getMultiple('available-server-settings', {}, { _id: 0 })
+  const templateNotifications = await routed.DB.getMultiple('available-server-settings', {}, { _id: 0 })
   return routed.res.send(templateNotifications)
 }
 

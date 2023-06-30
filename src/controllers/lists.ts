@@ -3,7 +3,7 @@ import * as Validation from '#/validations/index'
 import { WebRoute, WebRouted } from '#/web-router'
 
 import { badRequestError } from '../errors.ts'
-import { validate } from '#/utils/validate'
+import { validate } from '#/validate.ts'
 
 export const Routes: Array<WebRoute> = [
   // * Lists **/
@@ -25,14 +25,14 @@ export async function get(routed: WebRouted) {
   // this.DEBUG_WEBAPI('req params', v.o)
 
   if (v.valid) {
-    const users = await routed.Bot.DB.getMultiple(
+    const users = await routed.DB.getMultiple(
       'users',
       {
         username: { $options: 'i', $regex: new RegExp(`^${v.o.input}`) }
       },
       { discriminator: 1, username: 1 }
     )
-    const servers = await routed.Bot.DB.getMultiple(
+    const servers = await routed.DB.getMultiple(
       'servers',
       {
         name: { $options: 'i', $regex: new RegExp(`^${v.o.input}`) }

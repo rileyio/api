@@ -1,14 +1,14 @@
 import * as DiscordOauth2 from 'discord-oauth2'
+import * as Secrets from '#secrets'
 import * as crypto from 'crypto'
 
 import { WebRoute, WebRouted } from '#/web-router'
 
 import { TrackedUser } from '#objects/user/index'
-import { read as getSecret } from '#secrets'
-import { setCookie } from '../utils/cookies'
+import { setCookie } from '../cookies'
 
 const discClientID = process.env.DISCORD_APP_ID
-const discSecret = getSecret('DISCORD_APP_SECRET')
+const discSecret = Secrets.read('DISCORD_APP_SECRET')
 const discRedirectURI = process.env.DISCORD_REDIRECT_URI
 const portalRedirectURI = process.env.API_EXT_DEFAULT_URL
 const oauth = new DiscordOauth2()
@@ -39,7 +39,7 @@ export async function auth(routed: WebRouted) {
     state: crypto.randomBytes(16).toString('hex')
   })
 
-  routed.res.redirect(url, routed.next)
+  routed.res.redirect(url)
 }
 
 export async function authCallback(routed: WebRouted) {
@@ -55,7 +55,7 @@ export async function authCallback(routed: WebRouted) {
     state.token = await oauth.tokenRequest({
       clientId: discClientID,
       clientSecret: discSecret,
-      code: routed.req.query.code,
+      code: routed.req.statusCode.toString(),
       grantType: 'authorization_code',
       redirectUri: discRedirectURI,
       scope: ['identify', 'guilds']
@@ -73,13 +73,13 @@ export async function authCallback(routed: WebRouted) {
     state.user = await oauth.getUser(state.token.access_token)
 
     // Set Access Token on user
-    const user = new TrackedUser(await routed.Bot.DB.get('users', { id: state.user.id }))
+    const user = new TrackedUser(await routed.DB.get('users', { id: state.user.id }))
 
     // Set Web Token on user
     user.oauth(user)
 
     // Update user in db
-    await routed.Bot.DB.update(
+    await routed.DB.update(
       'users',
       { id: state.user.id },
       { $set: { accessToken: state.token.access_token, refreshToken: state.token.refresh_token, webToken: user.webToken } },
@@ -90,7 +90,7 @@ export async function authCallback(routed: WebRouted) {
     setCookie(routed.res, 'webToken', user.webToken, { maxAge: 1000 * 60 * 60 * 3 })
 
     // return routed.res.json(state.user)
-    return routed.res.redirect(portalRedirectURI, routed.next)
+    return routed.res.redirect(portalRedirectURI)
   } catch (error) {
     console.log('error', error)
   }

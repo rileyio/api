@@ -5,7 +5,7 @@ import { WebRoute, WebRouted } from '#/web-router'
 
 import { ObjectId } from 'bson'
 import { badRequestError } from '../errors.ts'
-import { validate } from '#/utils/validate'
+import { validate } from '#/validate.ts'
 
 export const Routes: Array<WebRoute> = [
   // * Server Settings * //
@@ -30,7 +30,7 @@ export async function settings(routed: WebRouted) {
   // this.DEBUG_WEBAPI('req params', v.o)
   if (v.valid) {
     return routed.res.send(
-      await routed.Bot.DB.getMultiple('server-settings', {
+      await routed.DB.getMultiple('server-settings', {
         serverID: v.o.serverID
       })
     )
@@ -46,7 +46,7 @@ export async function updateSettings(routed: WebRouted) {
   // console.log('req params', v)
 
   if (v.valid) {
-    const updateCount = await routed.Bot.DB.update(
+    const updateCount = await routed.DB.update(
       'server-settings',
       v.o._id ? { _id: new ObjectId(v.o._id) } : { serverID: v.o.serverID },
       {

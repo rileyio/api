@@ -8,7 +8,7 @@ export async function isAuthenticatedOwner(routed: WebRouted) {
   const token = routed.req.header('webToken')
   const serverID = routed.req.params.serverID
   // Get user from db to verify token
-  const user = await routed.Bot.DB.get('users', { guilds: { $elemMatch: { id: serverID, owner: true } }, id, webToken: token })
+  const user = await routed.DB.get('users', { guilds: { $elemMatch: { id: serverID, owner: true } }, id, webToken: token })
   // Invalid
   if (!user) {
     routed.res.send(401, 'Unauthorized')
@@ -57,7 +57,7 @@ export async function validateSession(routed: WebRouted) {
   }
 
   // Lookup Session in users collection
-  const storedSession = await routed.Bot.DB.get('users', {
+  const storedSession = await routed.DB.get('users', {
     id: userID,
     webToken
   })

@@ -1,5 +1,7 @@
-import * as Utils from '#utils'
+import { Logger } from '#utils'
+import { MongoDB } from '#db'
 import * as express from 'express'
+import { WebAPI } from './index.ts'
 
 export interface WebRoute {
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -11,37 +13,51 @@ export interface WebRoute {
 }
 
 export class WebRouted {
-  public log: Utils.Logger.Debug
+  public DB: MongoDB
   public route: WebRoute
+  public logger: Logger.Debug
   public controller: (routed: WebRouted) => Promise<boolean>
   // Express args
   public req: express.Request
   public res: express.Response
   public next: express.NextFunction
-  public session: { id: string, userID?: string }
+  public session: { id: string; userID?: string }
 
   constructor(init: Partial<WebRouted>) {
-    Object.assign(this, init)
+    this.DB = init.DB
+    this.logger = init.logger
+    this.next = init.next
+    this.route = init.route
+    this.req = init.req
+    this.res = init.res
+    this.route = init.route
+    // this.session = init.req.session
   }
 }
 
 export class WebRouter {
-  public log: Utils.Logger.Debug
+  public API: WebAPI
+  public log: Logger.Debug
   public server: express.Application
   public routes: Array<WebRoute> = []
 
-  constructor(logger: Utils.Logger.Debug, server: express.Application, routes: Array<WebRoute>) {
-    this.log = logger
+  constructor(api: WebAPI, server: express.Application, routes: Array<WebRoute>) {
+    this.API = api
     this.server = server
     this.routes = routes
 
+    this.log.verbose(`Routes found: ${this.routes.length}`)
+
     for (let index = 0; index < this.routes.length; index++) {
       const route = this.routes[index]
+      this.log.verbose(`Router -> [${route.path}] WebRoute loaded`)
+
       if (route.method === 'get') {
         this.server.get(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              log: this.log,
+              DB: this.API.DB,
+              logger: this.API.logger,
               next: next,
               req: req,
               res: res,
@@ -54,7 +70,8 @@ export class WebRouter {
         this.server.post(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              log: this.log,
+              DB: this.API.DB,
+              logger: this.API.logger,
               next: next,
               req: req,
               res: res,
@@ -67,7 +84,8 @@ export class WebRouter {
         this.server.delete(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              log: this.log,
+              DB: this.API.DB,
+              logger: this.API.logger,
               next: next,
               req: req,
               res: res,
@@ -80,7 +98,8 @@ export class WebRouter {
         this.server.patch(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              log: this.log,
+              DB: this.API.DB,
+              logger: this.API.logger,
               next: next,
               req: req,
               res: res,
@@ -93,7 +112,8 @@ export class WebRouter {
         this.server.put(route.path, async (req, res, next) =>
           middlewareHandler(
             new WebRouted({
-              log: this.log,
+              DB: this.API.DB,
+              logger: this.API.logger,
               next: next,
               req: req,
               res: res,
@@ -121,7 +141,7 @@ export async function middlewareHandler(routed: WebRouted) {
     mwareProcessed += 1
   }
 
-  routed.log.log(`Router -> [${routed.route.path}] WebRoute middleware processed: ${mwareProcessed}/${mwareCount}`)
+  routed.logger.log(`Router -> [${routed.route.path}] WebRoute middleware processed: ${mwareProcessed}/${mwareCount}`)
 
   // Stop execution of route if middleware is halted
   if (mwareProcessed === mwareCount) {

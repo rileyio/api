@@ -1,5 +1,5 @@
-import * as Middleware from '#/middleware/index'
-import { WebRoute, WebRouted } from '#/web-router'
+import * as Middleware from '../middleware/index.ts'
+import { WebRoute, WebRouted } from '../web-router.ts'
 
 export const Routes: Array<WebRoute> = [
   {
@@ -12,7 +12,7 @@ export const Routes: Array<WebRoute> = [
 ]
 
 export async function getEntries(routed: WebRouted) {
-  const auditEntries = await routed.Bot.DB.getLatest(
+  const auditEntries = await routed.DB.getLatest(
     'audit-log',
     {
       owner: routed.session.id

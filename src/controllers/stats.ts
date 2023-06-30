@@ -10,5 +10,5 @@ export const Routes: Array<WebRoute> = [
 ]
 
 export async function getAll(routed: WebRouted) {
-  return routed.res.json(routed.Bot.BotMonitor.LiveStatistics.BotStatistics)
+  return routed.res.json(await routed.DB.get('stats-bot', {}))
 }

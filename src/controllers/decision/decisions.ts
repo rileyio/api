@@ -6,8 +6,8 @@ import { TrackedDecision, TrackedDecisionOption } from '#objects/decision'
 import { WebRoute, WebRouted } from '#/web-router'
 
 import { ObjectId } from 'bson'
-import { badRequestError } from '#/api/errors.ts'
-import { validate } from '#/utils/validate'
+import { badRequestError } from '../../errors.ts'
+import { validate } from '#/validate'
 
 export const Routes: Array<WebRoute> = [
   {
@@ -78,14 +78,14 @@ export const Routes: Array<WebRoute> = [
 export async function getDecision(routed: WebRouted) {
   const v = await validate(Validation.Decisions.getDecision(), routed.req.body)
   if (v.valid) {
-    const decision = await routed.Bot.DB.get('decision', {
+    const decision = await routed.DB.get('decision', {
       $or: [{ authorID: routed.session.userID }, { managers: { $in: [routed.session.userID] } }],
       _id: new ObjectId(v.o._id)
     })
 
     if (decision) {
       try {
-        const logLookup: Array<TrackedDecision> = await routed.Bot.DB.aggregate('decision', [
+        const logLookup: Array<TrackedDecision> = await routed.DB.aggregate('decision', [
           {
             $match: {
               $or: [{ authorID: routed.session.userID }, { managers: { $in: [routed.session.userID] } }],
@@ -127,13 +127,13 @@ export async function getDecision(routed: WebRouted) {
           let caller = null as User
 
           try {
-            guild = routed.Bot.client.guilds.cache.get(d.serverID)
-            // channel = routed.Bot.client.channels.find(c => c.id !== d.channelID)
-            caller = routed.Bot.client.users.cache.find((u) => u.id === d.callerID)
+            // guild = routed.Bot.client.guilds.cache.get(d.serverID)
+            // // channel = routed.Bot.client.channels.find(c => c.id !== d.channelID)
+            // caller = routed.Bot.client.users.cache.find((u) => u.id === d.callerID)
 
-            d.serverID = guild.name
-            // d.channelID = channel.
-            d.callerID = `${caller.username}#${caller.discriminator}`
+            // d.serverID = guild.name
+            // // d.channelID = channel.
+            // d.callerID = `${caller.username}#${caller.discriminator}`
           } catch (error) {}
 
           return d
@@ -143,7 +143,7 @@ export async function getDecision(routed: WebRouted) {
       }
 
       // Lookup usage count to append
-      const used = await routed.Bot.DB.count('decision-log', { decisionID: decision._id.toHexString() })
+      const used = await routed.DB.count('decision-log', { decisionID: decision._id.toHexString() })
       decision.counter = used
 
       return routed.res.send({ data: new TrackedDecision(decision), status: 'fetchedOne', success: true })
@@ -155,7 +155,7 @@ export async function getDecision(routed: WebRouted) {
 }
 
 export async function getDecisions(routed: WebRouted) {
-  const decisions = await routed.Bot.DB.getMultiple('decision', {
+  const decisions = await routed.DB.getMultiple('decision', {
     $or: [{ authorID: routed.session.userID }, { managers: { $in: [routed.session.userID] } }]
   })
 
@@ -170,7 +170,7 @@ export async function deleteDecision(routed: WebRouted) {
   const v = await validate(Validation.Decisions.deleteDecision(), routed.req.body)
 
   if (v.valid) {
-    const deleteCount = await routed.Bot.DB.remove('decision', {
+    const deleteCount = await routed.DB.remove('decision', {
       _id: new ObjectId(v.o._id),
       authorID: routed.session.userID
     })
@@ -187,7 +187,7 @@ export async function updateDecisionOutcome(routed: WebRouted) {
   const v = await validate(Validation.Decisions.updateDecisionOutcome(), routed.req.body)
 
   if (v.valid) {
-    const updateCount = await routed.Bot.DB.update(
+    const updateCount = await routed.DB.update(
       'decision',
       { $or: [{ authorID: routed.session.userID }, { managers: { $in: [routed.session.userID] } }], 'options._id': new ObjectId(v.o._id) },
       {
@@ -211,7 +211,7 @@ export async function updateDecision(routed: WebRouted) {
   const v = await validate(Validation.Decisions.updateProps(), routed.req.body)
 
   if (v.valid) {
-    const updateCount = await routed.Bot.DB.update(
+    const updateCount = await routed.DB.update(
       'decision',
       {
         $or: [
@@ -253,7 +253,7 @@ export async function updateDecisionConsumeReset(routed: WebRouted) {
   const v = await validate(Validation.Decisions.updateConsumeReset(), routed.req.body)
 
   if (v.valid) {
-    const updateCount = await routed.Bot.DB.update(
+    const updateCount = await routed.DB.update(
       'decision',
       {
         $or: [
@@ -284,7 +284,7 @@ export async function deleteDecisionOutcome(routed: WebRouted) {
   const v = await validate(Validation.Decisions.deleteOutcome(), routed.req.body)
 
   if (v.valid) {
-    const deleteCount = await routed.Bot.DB.update(
+    const deleteCount = await routed.DB.update(
       'decision',
       { $or: [{ authorID: routed.session.userID }, { managers: { $in: [routed.session.userID] } }], 'options._id': new ObjectId(v.o._id) },
       { $pull: { options: { _id: new ObjectId(v.o._id) } } },
@@ -305,7 +305,7 @@ export async function addDecisionOutcome(routed: WebRouted) {
   if (v.valid) {
     const newDecisionOutcome = new TrackedDecisionOption({ text: v.o.text, type: v.o.type })
 
-    const addOutcome = await routed.Bot.DB.update(
+    const addOutcome = await routed.DB.update(
       'decision',
       {
         $or: [
@@ -346,7 +346,7 @@ export async function addDecision(routed: WebRouted) {
       name: v.o.name,
       serverID: '473856867768991744'
     })
-    const decisionId = await routed.Bot.DB.add('decision', newDeicison)
+    const decisionId = await routed.DB.add('decision', newDeicison)
 
     if (decisionId) {
       return routed.res.send({
@@ -368,7 +368,7 @@ export async function resetConsumed(routed: WebRouted) {
 
   if (v.valid) {
     // Reset all options consumed properties
-    const updateCount = await routed.Bot.DB.update(
+    const updateCount = await routed.DB.update(
       'decision',
       {
         $or: [

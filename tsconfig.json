@@ -14,7 +14,7 @@
       "#/*": ["./src/*"],
       "#db": ["./src/common/db/index.ts"],
       "#objects/*": ["./src/common/objects/*.ts"],
-      "#secrets": ["./src/common/secrets.ts"],
+      "#secrets": ["./src/common/utils/secrets.ts"],
       "#utils": ["./src/common/utils/index.ts"]
     },
     "preserveConstEnums": true,
@@ -26,5 +26,5 @@
     "typeRoots": ["./node_modules/@types/"]
   },
   "exclude": ["node_modules", "app"],
-  "include": ["src/**/*.ts", "../src/utils/**/*.ts", "../src/objects/**/*.ts", "../src/db/**/*.ts"]
+  "include": ["src/**/*.ts"]
 }
