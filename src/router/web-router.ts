@@ -36,6 +36,7 @@ export class WebRouted {
 }
 
 export class WebRouter {
+  protected validMethods = ['get', 'post', 'delete', 'put', 'patch']
   public API: WebAPI
   public logger: Logger.Debug
   public server: express.Application
@@ -51,79 +52,27 @@ export class WebRouter {
 
     for (let index = 0; index < this.routes.length; index++) {
       const route = this.routes[index]
-      this.logger.verbose(`Router -> [${route.path}] WebRoute loaded`)
 
-      if (route.method === 'get') {
-        this.server.get(route.path, async (req, res, next) =>
-          middlewareHandler(
-            new WebRouted({
-              DB: this.API.DB,
-              logger: this.API.logger,
-              next: next,
-              req: req,
-              res: res,
-              route: route
-            })
-          )
-        )
+      // Check if this is a valid route method recognized by the API
+      if (!this.validMethods.includes(route.method)) {
+        this.logger.error(`Router -> [${route.path}] WebRoute method [${route.method}] is invalid`)
+        continue
       }
-      if (route.method === 'post') {
-        this.server.post(route.path, async (req, res, next) =>
-          middlewareHandler(
-            new WebRouted({
-              DB: this.API.DB,
-              logger: this.API.logger,
-              next: next,
-              req: req,
-              res: res,
-              route: route
-            })
-          )
-        )
-      }
-      if (route.method === 'delete') {
-        this.server.delete(route.path, async (req, res, next) =>
-          middlewareHandler(
-            new WebRouted({
-              DB: this.API.DB,
-              logger: this.API.logger,
-              next: next,
-              req: req,
-              res: res,
-              route: route
-            })
-          )
-        )
-      }
-      if (route.method === 'patch') {
-        this.server.patch(route.path, async (req, res, next) =>
-          middlewareHandler(
-            new WebRouted({
-              DB: this.API.DB,
-              logger: this.API.logger,
-              next: next,
-              req: req,
-              res: res,
-              route: route
-            })
-          )
-        )
-      }
-      if (route.method === 'put') {
-        this.server.put(route.path, async (req, res, next) =>
-          middlewareHandler(
-            new WebRouted({
-              DB: this.API.DB,
-              logger: this.API.logger,
-              next: next,
-              req: req,
-              res: res,
-              route: route
-            })
-          )
-        )
-      }
+
+      this.logger.verbose(`🚏 <${route.method}> [${route.path}] WebRoute loaded`)
+      this.server[route.method](route.path, async (req, res, next) => middlewareHandler(this.createRouted(req, res, next, route)))
     }
+  }
+
+  private createRouted(req: express.Request, res: express.Response, next: express.NextFunction, route: WebRoute) {
+    return new WebRouted({
+      DB: this.API.DB,
+      logger: this.API.logger,
+      next: next,
+      req: req,
+      res: res,
+      route: route
+    })
   }
 }
 
