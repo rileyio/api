@@ -22,6 +22,7 @@ export class WebRouted {
   public res: express.Response
   public next: express.NextFunction
   public session: { id: string; userID?: string }
+  public stats: any
 
   constructor(init: Partial<WebRouted>) {
     this.DB = init.DB
@@ -31,6 +32,7 @@ export class WebRouted {
     this.req = init.req
     this.res = init.res
     this.route = init.route
+    this.stats = init.stats
     // this.session = init.req.session
   }
 }
@@ -59,7 +61,7 @@ export class WebRouter {
         continue
       }
 
-      this.logger.verbose(`🚏 <${route.method}> [${route.path}] WebRoute loaded`)
+      this.logger.verbose(`🚏 ::${route.method.toUpperCase()}:: [${route.path}] WebRoute loaded`)
       this.server[route.method](route.path, async (req, res, next) => middlewareHandler(this.createRouted(req, res, next, route)))
     }
   }
@@ -71,7 +73,8 @@ export class WebRouter {
       next: next,
       req: req,
       res: res,
-      route: route
+      route: route,
+      stats: this.API.publicStats
     })
   }
 }
