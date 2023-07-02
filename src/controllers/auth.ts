@@ -1,11 +1,11 @@
-import * as DiscordOauth2 from 'discord-oauth2'
+import DiscordOauth2 from 'discord-oauth2'
 import * as Secrets from '#secrets'
 import * as crypto from 'crypto'
 
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#/router/web-router'
 
 import { TrackedUser } from '#objects/user/index'
-import { setCookie } from '../cookies'
+import { setCookie } from '../cookies.ts'
 
 const discClientID = process.env.DISCORD_APP_ID
 const discSecret = Secrets.read('DISCORD_APP_SECRET')

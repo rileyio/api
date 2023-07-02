@@ -1,12 +1,12 @@
-import * as Middleware from '#/middleware/index'
+import * as Middleware from '#middleware'
 
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#/router/web-router'
 
 export const Routes: Array<WebRoute> = [
   {
     controller: getMyDataTotals,
     method: 'get',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-my-data-totals',
     path: '/api/user/mydata/totals'
   }

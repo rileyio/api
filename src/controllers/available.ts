@@ -1,6 +1,6 @@
-import * as Middleware from '#/middleware/index';
+import * as Middleware from '#middleware';
 
-import { WebRoute, WebRouted } from '#/web-router';
+import { WebRoute, WebRouted } from '#/router/web-router';
 
 import { TrackedUser } from '#objects/user/index';
 
@@ -8,14 +8,14 @@ export const Routes: Array<WebRoute> = [
   {
     controller: settings,
     method: 'post',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'available-settings',
     path: '/api/available/settings'
   },
   {
     controller: userGeneric,
     method: 'post',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'available-user',
     path: '/api/available/user'
   }

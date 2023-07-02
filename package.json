@@ -11,10 +11,12 @@
   "imports": {
     "#/*": "./src/*.ts",
     "#db": "./src/common/db/index.ts",
+    "#middleware": "./src/middleware/index.ts",
     "#objects/*": "./src/common/objects/*.ts",
-    "#router/*": "./src/router/*.ts",
+    "#router": "./src/router/index.ts",
     "#secrets": "./src/common/utils/secrets.ts",
-    "#utils": "./src/common/utils/index.ts"
+    "#utils": "./src/common/utils/index.ts",
+    "#validations": "./src/validations/index.ts"
   },
   "engines": {
     "node": ">=18.7.0"
@@ -35,6 +37,7 @@
     "fast-glob": "^3.2.12",
     "is-docker": "^3.0.0",
     "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
     "mongo_dottype": "^1.1.5",
     "mongodb": "^5.6.0",
     "nodemon": "^2.0.22",
@@ -47,6 +50,7 @@
   },
   "devDependencies": {
     "@types/debug": "^4.1.8",
-    "@types/express": "^4.17.17"
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2"
   }
 }

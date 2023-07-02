@@ -1,75 +1,75 @@
-import * as Middleware from '#/middleware/index'
-import * as Validation from '#/validations/index'
+import * as Middleware from '#middleware'
+import * as Validation from '#validations'
 
 import { Guild, User } from 'discord.js'
 import { TrackedDecision, TrackedDecisionOption } from '#objects/decision'
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#/router/web-router'
 
 import { ObjectId } from 'bson'
 import { badRequestError } from '../../errors.ts'
-import { validate } from '#/validate'
+import { validate } from '#validations'
 
 export const Routes: Array<WebRoute> = [
   {
     controller: getDecision,
     method: 'post',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-as-owner',
     path: '/api/decision'
   },
   {
     controller: getDecisions,
     method: 'get',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decisions-as-owner',
     path: '/api/decisions'
   },
   {
     controller: updateDecision,
     method: 'patch',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-update-props',
     path: '/api/decision/props'
   },
   {
     controller: addDecisionOutcome,
     method: 'put',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-new-outcome',
     path: '/api/decision/outcome'
   },
   {
     controller: updateDecisionOutcome,
     method: 'patch',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-update-outcome',
     path: '/api/decision/outcome'
   },
   {
     controller: deleteDecisionOutcome,
     method: 'delete',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-new-outcome',
     path: '/api/decision/outcome'
   },
   {
     controller: addDecision,
     method: 'put',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-new',
     path: '/api/decision'
   },
   {
     controller: deleteDecision,
     method: 'delete',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-delete',
     path: '/api/decision'
   },
   {
     controller: resetConsumed,
     method: 'patch',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'web-decision-reset-consume-mode',
     path: '/api/decision/consumedReset'
   }

@@ -3,12 +3,12 @@ import * as SocketIO from 'socket.io'
 import { Logger } from '#utils'
 import * as http from 'http'
 
-import { WebRoute, WebRouter } from './web-router.ts'
+import { WebRoute, WebRouter } from './router/web-router.ts'
 
 import { MongoDB } from '#db'
 import bodyParser from 'body-parser'
 import express from 'express'
-import { webRouteLoader } from './router/route-loader.ts'
+import { webRouteLoader } from '#router'
 
 export class WebAPI {
   protected readonly port: number = Number(process.env.API_PORT || 8234)
@@ -22,7 +22,6 @@ export class WebAPI {
   public logger = new Logger.Debug('API', { console: true })
 
   constructor() {
-    // Prepare DB
     this.DB = new MongoDB(this.logger)
 
     // Start Express server
@@ -71,6 +70,7 @@ export class WebAPI {
       })
     } catch (error) {
       this.logger.error(`API listening error.. unable to complete startup`, error.message)
+      throw error
       return false
     }
   }

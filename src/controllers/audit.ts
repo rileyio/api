@@ -1,11 +1,11 @@
 import * as Middleware from '../middleware/index.ts'
-import { WebRoute, WebRouted } from '../web-router.ts'
+import { WebRoute, WebRouted } from '../router/web-router.ts'
 
 export const Routes: Array<WebRoute> = [
   {
     controller: getEntries,
     method: 'post',
-    middleware: [Middleware.validateSession],
+    middleware: [Middleware.Auth.validateSession],
     name: 'audit-log',
     path: '/api/audit-log'
   }

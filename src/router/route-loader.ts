@@ -1,6 +1,6 @@
 import * as Path from 'path'
 
-import { WebRoute } from '#/web-router'
+import { WebRoute } from '#/router/web-router'
 import { Logger } from '#utils'
 import glob from 'fast-glob'
 

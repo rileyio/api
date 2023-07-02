@@ -1,7 +1,7 @@
 import { Logger } from '#utils'
 import { MongoDB } from '#db'
 import * as express from 'express'
-import { WebAPI } from './index.ts'
+import { WebAPI } from '../index.ts'
 
 export interface WebRoute {
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -37,7 +37,7 @@ export class WebRouted {
 
 export class WebRouter {
   public API: WebAPI
-  public log: Logger.Debug
+  public logger: Logger.Debug
   public server: express.Application
   public routes: Array<WebRoute> = []
 
@@ -45,12 +45,13 @@ export class WebRouter {
     this.API = api
     this.server = server
     this.routes = routes
+    this.logger = api.logger
 
-    this.log.verbose(`Routes found: ${this.routes.length}`)
+    this.logger.verbose(`Routes found: ${this.routes.length}`)
 
     for (let index = 0; index < this.routes.length; index++) {
       const route = this.routes[index]
-      this.log.verbose(`Router -> [${route.path}] WebRoute loaded`)
+      this.logger.verbose(`Router -> [${route.path}] WebRoute loaded`)
 
       if (route.method === 'get') {
         this.server.get(route.path, async (req, res, next) =>

@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken'
 
-import { WebRouted } from '#/web-router'
+import { WebRouted } from '#/router/web-router'
 
 export async function isAuthenticatedOwner(routed: WebRouted) {
   // User & Token from header
@@ -11,7 +11,7 @@ export async function isAuthenticatedOwner(routed: WebRouted) {
   const user = await routed.DB.get('users', { guilds: { $elemMatch: { id: serverID, owner: true } }, id, webToken: token })
   // Invalid
   if (!user) {
-    routed.res.send(401, 'Unauthorized')
+    routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
     return // FAIL
   }
 
@@ -22,7 +22,7 @@ export async function isAuthenticatedOwner(routed: WebRouted) {
     console.log('verify:', verify)
     return routed // PASS
   } catch (error) {
-    routed.res.send(401, 'Unauthorized')
+    routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
     return // FAIL
   }
 }
@@ -41,7 +41,7 @@ export async function validateSession(routed: WebRouted) {
   // If missing, fail
   if (!userID || !webToken) {
     console.log('ValidateSession => session information missing')
-    routed.res.send(401, 'Unauthorized')
+    routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
     return // FAIL
   }
 
@@ -52,7 +52,7 @@ export async function validateSession(routed: WebRouted) {
     console.log('ValidateSession => verifiedSession:', verifiedSession)
   } catch (error) {
     console.log('ValidateSession => Session not valid!')
-    routed.res.send(401, 'Unauthorized')
+    routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
     return // FAIL
   }
 
@@ -63,7 +63,7 @@ export async function validateSession(routed: WebRouted) {
   })
 
   // If session user is found but has been terminated
-  // if (storedSession) return routed.res.send(401, 'Unauthorized')
+  // if (storedSession) return routed.res.status(401).send({successful: false, error: 'Unauthorized'})
 
   // If valid record is found, return successful
   if (storedSession) {
@@ -86,6 +86,6 @@ export async function validateSession(routed: WebRouted) {
 //   }
 
 //   // Fallback - fail auth
-//   routed.res.send(401, 'Unauthorized')
+//   routed.res.status(401).send({successful: false, error: 'Unauthorized'})
 //   return
 // }

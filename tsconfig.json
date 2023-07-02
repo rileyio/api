@@ -13,9 +13,12 @@
     "paths": {
       "#/*": ["./src/*"],
       "#db": ["./src/common/db/index.ts"],
+      "#middleware": ["./src/middleware/index.ts"],
       "#objects/*": ["./src/common/objects/*.ts"],
+      "#router": ["./src/router/index.ts"],
       "#secrets": ["./src/common/utils/secrets.ts"],
-      "#utils": ["./src/common/utils/index.ts"]
+      "#utils": ["./src/common/utils/index.ts"],
+      "#validations": ["./src/validations/index.ts"]
     },
     "preserveConstEnums": true,
     "removeComments": true,

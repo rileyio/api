@@ -1,9 +1,8 @@
-import * as Validation from '#/validations/index'
+import * as Validation from '#validations'
 
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#router'
 
 import { badRequestError } from '../errors.ts'
-import { validate } from '#/validate.ts'
 
 export const Routes: Array<WebRoute> = [
   // * Lists **/
@@ -16,7 +15,7 @@ export const Routes: Array<WebRoute> = [
 ]
 
 export async function get(routed: WebRouted) {
-  const v = await validate(Validation.Lists.get(), routed.req.body)
+  const v = await Validation.validate(Validation.Lists.get(), routed.req.body)
   const payload = {
     servers: [],
     users: []

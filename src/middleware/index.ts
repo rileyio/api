@@ -1,1 +1,1 @@
-export * from './auth'
+export * as Auth from './auth.ts'

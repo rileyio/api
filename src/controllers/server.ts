@@ -1,32 +1,31 @@
-import * as Middleware from '#/middleware/index'
-import * as Validation from '#/validations/index'
+import * as Middleware from '#middleware'
+import * as Validation from '#validations'
 
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#/router/web-router.ts'
 
 import { ObjectId } from 'bson'
 import { badRequestError } from '../errors.ts'
-import { validate } from '#/validate.ts'
 
 export const Routes: Array<WebRoute> = [
   // * Server Settings * //
   {
     controller: settings,
     method: 'post',
-    middleware: [Middleware.isAuthenticatedOwner],
+    middleware: [Middleware.Auth.isAuthenticatedOwner],
     name: 'server-get-settings',
     path: '/api/server/settings'
   },
   {
     controller: updateSettings,
     method: 'post',
-    middleware: [Middleware.isAuthenticatedOwner],
+    middleware: [Middleware.Auth.isAuthenticatedOwner],
     name: 'server-update-setting',
     path: '/api/server/setting/update'
   }
 ]
 
 export async function settings(routed: WebRouted) {
-  const v = await validate(Validation.Server.getSettings(), routed.req.body)
+  const v = await Validation.validate(Validation.Server.getSettings(), routed.req.body)
   // this.DEBUG_WEBAPI('req params', v.o)
   if (v.valid) {
     return routed.res.send(
@@ -41,7 +40,7 @@ export async function settings(routed: WebRouted) {
 }
 
 export async function updateSettings(routed: WebRouted) {
-  const v = await validate(Validation.Server.updateSetting(), routed.req.body)
+  const v = await Validation.validate(Validation.Server.updateSetting(), routed.req.body)
 
   // console.log('req params', v)
 

@@ -1,4 +1,4 @@
-import { WebRoute, WebRouted } from '#/web-router'
+import { WebRoute, WebRouted } from '#/router/web-router'
 
 export const Routes: Array<WebRoute> = [
   {
