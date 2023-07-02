@@ -1,6 +1,6 @@
 {
   "name": "kiera-api",
-  "version": "1.0.0",
+  "version": "11.0-beta-2",
   "exports": "./app/start.js",
   "repository": "https://github.com/rileyio/kiera-api.git",
   "author": "Emma <RileyIO>",
