@@ -1,0 +1,8 @@
+# Change Log
+
+## v11
+
+### 11.0.0-beta-2
+- Updated: API now lives as its own project.
+- Updated: Stats are now cached every 1s instead of being fetched on each `/api/stats` request.
+- Updated: API `restify` being replaced with `express`.
