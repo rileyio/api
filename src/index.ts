@@ -17,9 +17,11 @@ export class WebAPI {
   protected server: http.Server
   protected socket: SocketIO.Server
   protected router: WebRouter
+  protected statsInterval: NodeJS.Timer
   public DB: MongoDB
   public configuredRoutes: Array<WebRoute> = []
   public logger = new Logger.Debug('API', { console: true })
+  public publicStats: any = {}
 
   constructor() {
     this.DB = new MongoDB(this.logger)
@@ -50,6 +52,11 @@ export class WebAPI {
     this.socket.on('disconnect', () => {
       this.logger.verbose('socket disconnect')
     })
+
+    // Setup Stats fetch interval to prevent spamming
+    this.statsInterval = setInterval(async () => {
+      this.publicStats = await this.DB.get('stats-bot', {}, undefined, { logging: false })
+    }, 1000)
 
     // Emit Stats (Loop)
     // SocketStats.stats(this.Bot, this.socket)
