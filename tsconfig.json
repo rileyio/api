@@ -24,7 +24,6 @@
     "removeComments": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "allowImportingTsExtensions": true,
     "target": "ES2022",
     "typeRoots": ["./node_modules/@types/"]
   },
