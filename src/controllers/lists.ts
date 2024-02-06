@@ -2,7 +2,7 @@ import * as Validation from '#validations'
 
 import { WebRoute, WebRouted } from '#router'
 
-import { badRequestError } from '../errors.ts'
+import { badRequestError } from '../errors'
 
 export const Routes: Array<WebRoute> = [
   // * Lists **/

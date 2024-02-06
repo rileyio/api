@@ -1,5 +1,5 @@
-import * as Middleware from '../middleware/index.ts'
-import { WebRoute, WebRouted } from '../router/web-router.ts'
+import * as Middleware from '../middleware/index'
+import { WebRoute, WebRouted } from '../router/web-router'
 
 export const Routes: Array<WebRoute> = [
   {

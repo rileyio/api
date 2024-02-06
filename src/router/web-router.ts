@@ -1,7 +1,7 @@
 import { Logger } from '#utils'
 import { MongoDB } from '#db'
 import * as express from 'express'
-import { WebAPI } from '../index.ts'
+import { WebAPI } from '../index'
 
 export interface WebRoute {
   // eslint-disable-next-line @typescript-eslint/ban-types

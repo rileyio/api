@@ -1,2 +1,2 @@
-export * from './route-loader.ts'
-export * from './web-router.ts'
+export * from './route-loader'
+export * from './web-router'

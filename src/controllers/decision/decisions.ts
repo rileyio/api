@@ -6,7 +6,7 @@ import { TrackedDecision, TrackedDecisionOption } from '#objects/decision'
 import { WebRoute, WebRouted } from '#/router/web-router'
 
 import { ObjectId } from 'bson'
-import { badRequestError } from '../../errors.ts'
+import { badRequestError } from '../../errors'
 import { validate } from '#validations'
 
 export const Routes: Array<WebRoute> = [

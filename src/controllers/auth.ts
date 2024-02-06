@@ -5,7 +5,7 @@ import * as crypto from 'crypto'
 import { WebRoute, WebRouted } from '#/router/web-router'
 
 import { TrackedUser } from '#objects/user/index'
-import { setCookie } from '../cookies.ts'
+import { setCookie } from '../cookies'
 
 const discClientID = process.env.DISCORD_APP_ID
 const discSecret = Secrets.read('DISCORD_APP_SECRET')

@@ -1,10 +1,10 @@
 import * as Middleware from '#middleware'
 import * as Validation from '#validations'
 
-import { WebRoute, WebRouted } from '#/router/web-router.ts'
+import { WebRoute, WebRouted } from '#/router/web-router'
 
 import { ObjectId } from 'bson'
-import { badRequestError } from '../errors.ts'
+import { badRequestError } from '../errors'
 
 export const Routes: Array<WebRoute> = [
   // * Server Settings * //

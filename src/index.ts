@@ -1,7 +1,7 @@
 import * as SocketIO from 'socket.io'
 import * as http from 'http'
 
-import { WebRoute, WebRouter } from './router/web-router.ts'
+import { WebRoute, WebRouter } from './router/web-router'
 
 // import * as SocketStats from '#/socket/stats'
 import { Logger } from '#utils'

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { WebAPI } from './index.ts' // Stop From Sorting
+import { WebAPI } from './index' // Stop From Sorting
 
 // Start API (may be moved elsewhere later)
 const api = new WebAPI()

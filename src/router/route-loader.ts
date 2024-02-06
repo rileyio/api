@@ -6,7 +6,7 @@ import glob from 'fast-glob'
 
 export async function webRouteLoader(logger: Logger.Debug) {
   // Load routes from commands folder
-  const _routeFiles = glob.sync(['src/controllers/**/*.ts', '!src/controllers/**/index.ts'], { deep: 5 })
+  const _routeFiles = glob.sync(['src/controllers/**/*', '!src/controllers/**/index'], { deep: 5 })
 
   // Collection of routes
   const routes: Array<WebRoute> = []
