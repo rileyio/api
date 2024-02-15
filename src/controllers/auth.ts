@@ -49,19 +49,23 @@ export async function authCallback(routed: WebRouted) {
     user: null
   } as { error: Error; token: DiscordOauth2.TokenRequestResult; user: DiscordOauth2.User }
 
+  // ! When the code query param isn't available
+  // ! most likely cause for this is the user clicking cancel
+  if (routed.req.query.code === undefined) return routed.res.send(402) // Stop here
+
   // * Fetch Token
   try {
     console.log('fetching Token')
     state.token = await oauth.tokenRequest({
       clientId: discClientID,
       clientSecret: discSecret,
-      code: routed.req.statusCode.toString(),
+      code: routed.req.query.code.toString(),
       grantType: 'authorization_code',
       redirectUri: discRedirectURI,
       scope: ['identify', 'guilds']
     })
 
-    console.log('token', state.token)
+    // console.log('token', state.token)
   } catch (error) {
     console.log('error fetching Token', error)
     return routed.res.send(402) // Stop here

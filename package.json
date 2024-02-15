@@ -37,7 +37,7 @@
     "fast-glob": "^3.2.12",
     "is-docker": "^3.0.0",
     "joi": "^17.9.2",
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mongo_dottype": "^1.1.5",
     "mongodb": "^5.6.0",
     "random": "^4.1.0",

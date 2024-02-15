@@ -1,6 +1,6 @@
-import * as jwt from 'jsonwebtoken'
-
+import { Secrets } from '#utils'
 import { WebRouted } from '#router'
+import jwt from 'jsonwebtoken';
 
 export async function isAuthenticatedOwner(routed: WebRouted) {
   // User & Token from header
@@ -18,8 +18,7 @@ export async function isAuthenticatedOwner(routed: WebRouted) {
   // Verify token
   try {
     // Verify token & payload
-    const verify = jwt.verify(token, process.env.BOT_SECRET)
-    console.log('verify:', verify)
+    const verify = jwt.verify(token, Secrets.read('BOT_OAUTH_SECRET'))
     return routed // PASS
   } catch (error) {
     routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
@@ -48,10 +47,10 @@ export async function validateSession(routed: WebRouted) {
   // Verify session
   try {
     // Verify session & payload
-    verifiedSession = jwt.verify(webToken, process.env.BOT_SECRET) as typeof verifiedSession
+    verifiedSession = jwt.verify(webToken, Secrets.read('BOT_OAUTH_SECRET')) as typeof verifiedSession
     console.log('ValidateSession => verifiedSession:', verifiedSession)
   } catch (error) {
-    console.log('ValidateSession => Session not valid!')
+    console.log('ValidateSession => Session not valid!', error)
     routed.res.status(401).send({ successful: false, error: 'Unauthorized' })
     return // FAIL
   }
