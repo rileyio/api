@@ -21,6 +21,14 @@
   "engines": {
     "node": ">=18.7.0"
   },
+  "prettier": {
+    "printWidth": 180,
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false
+  },
   "scripts": {
     "build": "tsc",
     "dev": "DEBUG='kiera-api:*' tsx --no-warnings --watch ./src/start.ts"
