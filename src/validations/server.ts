@@ -1,4 +1,4 @@
-import * as joi from 'joi'
+import joi from 'joi'
 
 export namespace Server {
   export function getSettings() {
