@@ -1,5 +1,6 @@
 import * as SocketIO from 'socket.io'
 import * as http from 'http'
+import * as Secrets from '#secrets'
 
 import { WebRoute, WebRouter } from './router/web-router'
 
@@ -8,6 +9,7 @@ import { Logger } from '#utils'
 import { MongoDB } from '#db'
 import bodyParser from 'body-parser'
 import express from 'express'
+import * as redis from 'redis'
 import { webRouteLoader } from '#router'
 
 export class WebAPI {
@@ -19,12 +21,26 @@ export class WebAPI {
   protected router: WebRouter
   protected statsInterval: NodeJS.Timer
   public DB: MongoDB
+  public redis: any
   public configuredRoutes: Array<WebRoute> = []
   public logger = new Logger.Debug('API', { console: true })
+  public dbLogger = new Logger.Debug('DB', { console: false })
   public publicStats: any = {}
 
   constructor() {
-    this.DB = new MongoDB(this.logger)
+    this.DB = new MongoDB(this.dbLogger)
+
+    // Prepare Redis
+    this.redis = redis.createClient({
+      socket: {
+        host: Secrets.read('REDIS_HOST'),
+        port: Number(Secrets.read('REDIS_PORT'))
+      }
+    })
+    this.redis.connect()
+    this.redis.on('error', (err) => {
+      console.log('redis error:', err)
+    })
 
     // Start Express server
     this.express = express()
@@ -55,7 +71,7 @@ export class WebAPI {
 
     // Setup Stats fetch interval to prevent spamming
     this.statsInterval = setInterval(async () => {
-      this.publicStats = await this.DB.get('stats-bot', {}, undefined, { logging: false })
+      this.publicStats = await this.DB.get('stats-bot', {}, undefined)
     }, 1000)
 
     // Emit Stats (Loop)
