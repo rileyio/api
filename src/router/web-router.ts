@@ -2,6 +2,7 @@ import { Logger } from '#utils'
 import { MongoDB } from '#db'
 import * as express from 'express'
 import { WebAPI } from '../index'
+import { RedisClientType } from '@redis/client'
 
 export interface WebRoute {
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -14,6 +15,7 @@ export interface WebRoute {
 
 export class WebRouted {
   public DB: MongoDB
+  public Redis: RedisClientType
   public route: WebRoute
   public logger: Logger.Debug
   public controller: (routed: WebRouted) => Promise<boolean>
@@ -26,6 +28,7 @@ export class WebRouted {
 
   constructor(init: Partial<WebRouted>) {
     this.DB = init.DB
+    this.Redis = init.Redis
     this.logger = init.logger
     this.next = init.next
     this.route = init.route
@@ -69,6 +72,7 @@ export class WebRouter {
   private createRouted(req: express.Request, res: express.Response, next: express.NextFunction, route: WebRoute) {
     return new WebRouted({
       DB: this.API.DB,
+      Redis: this.API.redis,
       logger: this.API.logger,
       next: next,
       req: req,
