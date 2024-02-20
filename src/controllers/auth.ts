@@ -90,8 +90,8 @@ export async function authCallback(routed: WebRouted) {
       { atomic: true }
     )
 
-    setCookie(routed.res, 'userID', user.id, { maxAge: 1000 * 60 * 60 * 3 })
-    setCookie(routed.res, 'webToken', user.webToken, { maxAge: 1000 * 60 * 60 * 3 })
+    setCookie(routed.res, 'userID', user.id, { maxAge: 1000 * 60 * 60 * 3, httpOnly: false, path: '/', sameSite: 'lax' })
+    setCookie(routed.res, 'webToken', user.webToken, { maxAge: 1000 * 60 * 60 * 3, httpOnly: false, path: '/', sameSite: 'lax' })
 
     // return routed.res.json(state.user)
     return routed.res.redirect(portalRedirectURI)

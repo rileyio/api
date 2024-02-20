@@ -7,7 +7,7 @@ export function parseCookies(req: Request): Cookies {
   return req.headers.cookie ? parse(req.headers.cookie) : {}
 }
 
-export function setCookie(res: Response, name: string, value: string, options: { maxAge: number }): void {
+export function setCookie(res: Response, name: string, value: string, options: { maxAge: number, httpOnly?: boolean, path?: string, sameSite?: 'lax' }): void {
   console.warn('More Dev needed!')
   const currentCookies = res.getHeader('Set-Cookie')
   // When 'Set-Cookie' is already set, we need to append the new cookie to the existing ones
