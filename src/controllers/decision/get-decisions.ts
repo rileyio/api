@@ -23,7 +23,7 @@ export async function getDecisions(routed: WebRouted) {
       decisionsPrepared.push(new TrackedDecision(decision, discordUser))
     }
 
-    return routed.res.send(decisionsPrepared)
+    return routed.res.send({ success: true, status: 'gotMultiple', data: decisionsPrepared })
   }
 
   return routed.next(badRequestError(routed))
