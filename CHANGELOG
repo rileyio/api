@@ -1,5 +1,8 @@
 # Change Log
 
+## v12
+- Updated: Secrets loader name searching and response value cleaning.
+
 ## v11
 
 ### 11.0.0-beta-2
